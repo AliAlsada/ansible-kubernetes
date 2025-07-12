@@ -1,0 +1,16 @@
+---
+- name: Docker servers
+  hosts: docker_servers
+  become: true
+  gather_facts: true
+  roles:
+    - docker
+  tags: docker
+
+- name: kubernetes servers
+  hosts: kubernetes_servers
+  become: true
+  gather_facts: true
+  roles:
+    - kubernetes
+  tags: kubernetes

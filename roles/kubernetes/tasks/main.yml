@@ -1,0 +1,9 @@
+---
+- include_tasks: setup.yml
+  when: inventory_hostname in groups.kubernetes_servers
+
+- include_tasks: clusters.yml
+  when: inventory_hostname in groups.master_servers
+
+- include_tasks: workers.yml
+  when: inventory_hostname in groups.worker_servers

@@ -1,0 +1,4 @@
+global:
+  env: local
+  domain: localhost
+  environment_domain: localhost

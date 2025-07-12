@@ -1,0 +1,50 @@
+---
+- name: Docker - Install dependencies
+  apt:
+    name:
+      - gpg
+      - curl
+      - ca-certificates
+    state: present
+
+- name: Docker - Install APT key
+  shell:
+    cmd: "curl -fsSL {{ docker_apt_key_url }} -o {{ docker_apt_key_dest }}"
+    creates: "{{ docker_apt_key_dest }}"
+
+- name: Docker - Update APT key permission
+  file:
+    path: "{{ docker_apt_key_dest }}"
+    mode: a+r
+
+- name: Docker - Install APT repository
+  copy:
+    content: "{{ docker_apt_repo_url }}"
+    dest: /etc/apt/sources.list.d/docker.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Docker - Install docker and required packages
+  apt:
+    name:
+      - docker-ce
+      - python3-docker
+    state: present
+    update_cache: yes
+
+# https://github.com/docker/docker-py/issues/3256
+- name: Docker - Install requests via Pip (latest)
+  pip:
+    name: requests==2.31.0
+  when: docker_force_requests_version
+
+- name: Docker - Add borgbackup user to docker group
+  user:
+    name: "{{ borgbackup_user }}"
+    groups: docker
+    append: yes
+  when:
+    - borgbackup_user is defined
+    - inventory_hostname in groups.borgbackup_clients
+  tags: postgres

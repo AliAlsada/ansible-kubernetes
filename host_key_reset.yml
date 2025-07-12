@@ -1,0 +1,25 @@
+---
+- name: Update local host key file
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Remove existing host key entries
+      file:
+        path: "~/.ssh/ansible_42_{{ global.env }}_known_hosts"
+        state: absent
+      delegate_to: localhost
+      run_once: true
+
+    - name: Create ansible_42_known_hosts
+      file:
+        path: "~/.ssh/ansible_42_{{ global.env }}_known_hosts"
+        state: touch
+        mode: 0644
+      delegate_to: localhost
+      run_once: true
+
+    - name: Accept all host keys
+      shell: "ssh-keyscan -H {{ inventory_hostname }} >> ~/.ssh/ansible_42_{{ global.env }}_known_hosts"
+      when: "inventory_hostname not in ['localhost', '127.0.0.1', '::1']"
+      delegate_to: localhost

@@ -1,0 +1,7 @@
+---
+# Versions
+kubernetes_version: 1.33
+
+# Network configuration
+kubernetes_pod_network_cidr: 10.244.0.0/16
+kubernetes_service_cidr: 10.96.0.0/12

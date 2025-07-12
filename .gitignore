@@ -1,0 +1,14 @@
+.vagrant/
+installed-collections/
+installed-roles/
+*.log
+
+# terraform files
+**/__pycache__/*
+__pycache__/
+__pycache__*
+**/venv/*
+venv/
+venv*
+.vault_pass.txt
+.DS_Store

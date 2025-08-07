@@ -1,0 +1,10 @@
+---
+- name: Network - Configure nameservers
+  template:
+    src: "{{ ansible_os_family | lower }}/network/resolved.conf.j2"
+    dest: /etc/systemd/resolved.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: network resolved - restart
+  tags: nat

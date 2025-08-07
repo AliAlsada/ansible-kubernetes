@@ -1,4 +1,12 @@
 ---
+- name: baseline servers
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - base
+  tags: base
+
 - name: Docker servers
   hosts: docker_servers
   become: true

@@ -32,19 +32,19 @@
     state: directory
     mode: '0755'
 
-- name: Generate containerd configuration with CRI enabled
+- name: Generat e containerd configuration with CRI enabled
   shell: containerd config default > /etc/containerd/config.toml
   notify: restart containerd
 
-- name: Force handler to run now
-  meta: flush_handlers
-  
 - name: Configure containerd to use systemd cgroup driver
   lineinfile:
     path: /etc/containerd/config.toml
     regexp: '^\s*SystemdCgroup = false'
     line: '            SystemdCgroup = true'
     backrefs: yes
+
+- name: Force handler to run now
+  meta: flush_handlers
 
 - name: Load br_netfilter kernel module
   modprobe:

@@ -7,6 +7,14 @@
     - base
   tags: base
 
+- name: nfs servers
+  hosts: nfs_servers
+  become: true
+  gather_facts: true
+  roles:
+    - nfs
+  tags: nfs
+
 - name: Docker servers
   hosts: docker_servers
   become: true

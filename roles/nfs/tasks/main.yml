@@ -1,0 +1,6 @@
+---
+- include_tasks: server.yml
+  tags: nfs
+
+# - include_tasks: firewall.yml
+#   tags: nfs

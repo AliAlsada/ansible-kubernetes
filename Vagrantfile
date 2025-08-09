@@ -5,8 +5,9 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
 Vagrant.configure("2") do |config|
   boxes = [
     { "name": "master-1", "box": "generic/ubuntu2204", "version": "4.2.16", "memory": 4024, "cpu": 4 },
-    { "name": "node-1", "box": "generic/ubuntu2204", "version": "4.2.16", "memory": 4024, "cpu": 4 },
-    { "name": "node-2", "box": "generic/ubuntu2204", "version": "4.2.16", "memory": 4024, "cpu": 4 },
+    { "name": "worker-1", "box": "generic/ubuntu2204", "version": "4.2.16", "memory": 4024, "cpu": 4 },
+    { "name": "worker-2", "box": "generic/ubuntu2204", "version": "4.2.16", "memory": 4024, "cpu": 4 },
+    { "name": "nfs-1", "box": "generic/ubuntu2204", "version": "4.2.16", "memory": 2024, "cpu": 2 },
   ]
 
   boxes.each_with_index do |opts, index|
@@ -36,6 +37,7 @@ Vagrant.configure("2") do |config|
       box.vm.provider :libvirt do |v|
         v.memory = opts[:memory]
         v.cpus = opts[:cpu]
+        v.suspend_mode="managedsave"
         # Disable the default management network DNS to prevent conflicts
         v.management_network_autostart = false
         v.management_network_name = "k8s-mgmt"

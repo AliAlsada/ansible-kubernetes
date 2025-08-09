@@ -1,0 +1,9 @@
+---
+- name: Restart NFS service
+  service:
+    name: "{{ nfs_service_name }}"
+    state: restarted
+
+- name: Reboot if lockd.conf changed
+  reboot:
+    msg: "Rebooting to apply static lockd port configuration"

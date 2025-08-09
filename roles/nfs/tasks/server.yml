@@ -1,0 +1,41 @@
+---
+- name: NFS - Install NFS server package
+  package:
+    name: nfs-kernel-server
+    state: present
+
+- name: NFS - Create export directory
+  ansible.builtin.file:
+    path: "{{ nfs_export_path }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0750'
+    recurse: yes
+
+- name: NFS - Configure NFS exports
+  copy:
+    dest: /etc/exports
+    content: "{{ nfs_export_path }} {{ nfs_network }}({{ nfs_mount_options }})\n"
+  notify: Restart NFS service
+
+- name: NFS - Copy configuration templates
+  template:
+    src: "{{ item.name }}.j2"
+    dest: "{{ item.path }}/{{ item.name }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { name: "nfs.conf", path: "/etc" }
+    - { name: "lockd.conf", path: "/etc/modprobe.d" }
+  notify: Reboot if lockd.conf changed
+
+- name: NFS - Export shares
+  command: exportfs -rav
+
+- name: NFS - Enable and start service
+  service:
+    name: "{{ nfs_service_name }}"
+    state: started
+    enabled: true

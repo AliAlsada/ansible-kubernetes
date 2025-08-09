@@ -1,0 +1,8 @@
+---
+- name: Firewall - Allow Additional Ports or All Traffic
+  ufw:
+    rule: allow
+    src: "{{ item.src | default('0.0.0.0/0') }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto | default('any') }}"
+  loop: "{{ firewall_allowed_ports }}"
